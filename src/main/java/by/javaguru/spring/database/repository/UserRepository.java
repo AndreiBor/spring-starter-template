@@ -1,30 +1,15 @@
 package by.javaguru.spring.database.repository;
 
-import jakarta.annotation.PostConstruct;
-import jakarta.annotation.PreDestroy;
-import lombok.RequiredArgsConstructor;
+import by.javaguru.spring.database.pool.ConnectionPool;
 import lombok.ToString;
+import org.springframework.stereotype.Repository;
 
-import java.util.List;
-import java.util.Map;
+@Repository
 
-@RequiredArgsConstructor
 @ToString
 public class UserRepository{
-    private final String userName;
-    private final Integer age;
-    private final List<Object> args;
-    private final Map<String, Object> properties;
 
-    @PostConstruct
-    private void init() {
-        System.out.println("Init UserRepository");
+    public UserRepository(ConnectionPool connectionPool) {
+
     }
-
-
-    @PreDestroy
-    private void destroy() {
-        System.out.println("Clean UserRepository");
-    }
-
 }

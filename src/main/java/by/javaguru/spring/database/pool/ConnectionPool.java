@@ -2,30 +2,29 @@ package by.javaguru.spring.database.pool;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
-import org.springframework.beans.factory.InitializingBean;
+import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import lombok.ToString;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
-import java.util.List;
-import java.util.Map;
-
+@Component("connectionPool1")
+@ToString
 public class ConnectionPool {
 
-    private final String username;
-    private final Integer poolSize;
-    private final List<Object> args;
-    private Map<String, Object> properties;
+    private String username;
+    private String password;
+    private int poolSize;
+    private String url;
 
-    public ConnectionPool(String username,
-                          Integer poolSize,
-                          List<Object> args,
-                          Map<String, Object> properties) {
+    public ConnectionPool(@Value("${db.username}") String username,
+                          @Value("${db.password}") String password,
+                          @Value("${db.pool.size}") int poolSize,
+                          @Value("${db.url}") String url) {
         this.username = username;
+        this.password = password;
         this.poolSize = poolSize;
-        this.args = args;
-        this.properties = properties;
-    }
-
-    public void setProperties(Map<String, Object> properties) {
-        this.properties = properties;
+        this.url = url;
     }
 
     @PostConstruct
