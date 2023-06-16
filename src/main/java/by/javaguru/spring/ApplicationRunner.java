@@ -1,21 +1,15 @@
 package by.javaguru.spring;
 
-import by.javaguru.spring.config.ApplicationConfiguration;
-import by.javaguru.spring.database.repository.CompanyRepository;
-import by.javaguru.spring.database.repository.UserRepository;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import by.javaguru.spring.config.DatabaseProperties;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 
-
+@SpringBootApplication
+@ConfigurationPropertiesScan
 public class ApplicationRunner {
     public static void main(String[] args) {
-        var context =  new AnnotationConfigApplicationContext(ApplicationConfiguration.class);
-//        var context =  new ClassPathXmlApplicationContext("application.xml");
-
-//        var userRepository = context.getBean("r1", UserRepository.class);
-
-        var companyRepository = context.getBean("companyRepository", CompanyRepository.class);
-        System.out.println(companyRepository);
-        context.close();
+        var context = SpringApplication.run(ApplicationRunner.class, args);
+        System.out.println(context.getBean(DatabaseProperties.class));
     }
 }

@@ -1,28 +1,55 @@
 plugins {
+    id("io.freefair.lombok") version "8.0.1"
+    id 'org.springframework.boot' version '3.1.0'
+    id 'io.spring.dependency-management' version '1.1.0'
+    id 'com.ewerk.gradle.plugins.querydsl' version '1.0.10'
     id 'java'
+}
+
+configurations {
+    querydsl.extendsFrom implementation, compileOnly, runtimeOnly
 }
 
 group 'by.javaguru'
 version '1.0-SNAPSHOT'
+sourceCompatibility = '17'
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    implementation 'org.springframework:spring-core:6.0.6'
-    implementation 'org.springframework:spring-context:6.0.6'
-    implementation 'jakarta.annotation:jakarta.annotation-api:2.1.1'
+    implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.postgresql:postgresql'
+    implementation 'org.apache.tomcat.embed:tomcat-embed-jasper'
+    implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
+//    implementation 'org.springdoc:springdoc-openapi-ui:1.7.0'
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.4'
 
-    compileOnly 'org.projectlombok:lombok:1.18.26'
-    annotationProcessor 'org.projectlombok:lombok:1.18.26'
+    annotationProcessor 'com.querydsl:querydsl-apt'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
 
-    testCompileOnly 'org.projectlombok:lombok:1.18.26'
-    testAnnotationProcessor 'org.projectlombok:lombok:1.18.26'
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.2'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.2'
+querydsl {
+    jpa = true
+    library = 'com.querydsl:querydsl-apt:5.0.0:jakarta'
+    querydslSourcesDir = "$buildDir/generated/sources/annotationProcessor/java/main"
+}
+
+initQuerydslSourcesDir.dependsOn clean
+
+compileQuerydsl {
+    options.annotationProcessorPath = configurations.querydsl
 }
 
 test {
     useJUnitPlatform()
+}
+
+wrapper {
+    gradleVersion '7.6.1'
 }

@@ -1,30 +1,27 @@
 package by.javaguru.spring.database.repository;
 
-import by.javaguru.spring.bpp.InjectBean;
-import by.javaguru.spring.database.pool.ConnectionPool;
-import jakarta.annotation.Resource;
-import lombok.ToString;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Repository;
+import by.javaguru.spring.database.entity.Company;
+import by.javaguru.spring.database.entity.User;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.Repository;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
-@Repository
-@ToString
-public class CompanyRepository {
 
-    private final ConnectionPool connectionPool;
-    private final List<ConnectionPool> pools;
-    private final Integer poolSize;
+public interface CompanyRepository extends JpaRepository<Company, Integer> {
 
-    public CompanyRepository(@Qualifier("connectionPool2") ConnectionPool connectionPool,
-                             List<ConnectionPool> pools,
-                             @Value("${db.pool.size}") Integer poolSize) {
-        this.connectionPool = connectionPool;
-        this.pools = pools;
-        this.poolSize = poolSize;
-    }
+    // Optional Entity Future
+    @Query("select c from Company c " +
+            "join fetch c.locales cl " +
+            "where c.name = :name2")
+    Optional<Company> findByName(@Param("name2") String name);
+
+    // List, Stream (batch)
+    List<Company> findAllByNameContainingIgnoreCase(String fragment);
+
+
 }
